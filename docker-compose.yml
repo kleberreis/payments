@@ -11,7 +11,7 @@ services:
     depends_on:
       - postgres
     environment:
-      DATABASE_URL: jdbc:postgresql://postgres:5432/activations
+      DATABASE_URL: jdbc:postgresql://postgres:5432/payments
 
   postgres:
     image: public.ecr.aws/docker/library/postgres:12.13
@@ -19,8 +19,8 @@ services:
     volumes:
       - ./src/main/resources/db/docker-db-init.sql:/docker-entrypoint-initdb.d/docker-db-init.sql
     ports:
-      - 5432:5432
+      - 5433:5432
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
-      POSTGRES_DB: activations
+      POSTGRES_DB: payments
