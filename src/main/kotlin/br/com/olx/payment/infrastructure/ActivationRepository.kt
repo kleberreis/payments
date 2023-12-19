@@ -1,11 +1,11 @@
-package br.com.olx.activation.infrastructure
+package br.com.olx.payment.infrastructure
 
-import br.com.olx.activation.domain.Activations
+import br.com.olx.payment.domain.Payments
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface ActivationRepository : CrudRepository<Activations, Long>{
+interface ActivationRepository : CrudRepository<Payments, Long>{
 
     fun findByAdId(adId: String)
 

@@ -1,4 +1,4 @@
-package br.com.olx.activation
+package br.com.olx.payment
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

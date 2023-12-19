@@ -1,45 +1,43 @@
-package br.com.olx.activation.application
+package br.com.olx.payment.application
 
-import br.com.olx.activation.api.Activation
-import br.com.olx.activation.domain.Activations
-import br.com.olx.activation.infrastructure.ActivationRepository
+import br.com.olx.payment.api.Payment
+import br.com.olx.payment.domain.Activation
+import br.com.olx.payment.domain.Payments
+import br.com.olx.payment.infrastructure.ActivationRepository
+import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import java.lang.RuntimeException
+import org.springframework.web.client.RestTemplate
+
 
 @Service
-class ActivationService(
+class PaymentService(
     @Autowired
     val repository: ActivationRepository
 ) {
 
     @Transactional
-    fun save(activation: Activation){
-        val entity = Activations.from(activation)
+    fun save(payment: Payment){
+        val entity = Payments.from(payment)
         repository.save(entity)
         try{
-            mandaPraFila()
+            sendToActivation(payment)
         }catch (e: Exception){
-            println("mensagem não enviada pra fila")
+            println("mensagem não enviada para activations")
         }
-
-
-    }
-
-
-    fun orquestracao(activation: Activation){
-        try{
-            save(activation)
-        }catch (e: Exception){
-            // compensacao, chamar o servico x para desfazer o que foi feito
-            // relancar excecao.
-        }
-
     }
 
     fun mandaPraFila(){
         println("mandei pra fila")
         throw RuntimeException("lascou!")
+    }
+
+    fun sendToActivation(payment: Payment) {
+        val createActivationUrl = "http://localhost:8080"
+        val restTemplate = RestTemplate()
+        val activation = Activation(payment.productKey, payment.adId)
+
+        restTemplate.postForEntity(createActivationUrl, activation, String.javaClass)
     }
 }
