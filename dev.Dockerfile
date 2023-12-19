@@ -1,4 +1,4 @@
-FROM openjdk:13-alpine
+FROM --platform=linux/amd64 openjdk:13-alpine
 
 WORKDIR /app/build/libs
 
