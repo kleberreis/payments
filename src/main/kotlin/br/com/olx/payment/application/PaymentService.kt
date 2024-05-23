@@ -10,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 import org.springframework.kafka.core.KafkaTemplate
-
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.messaging.support.MessageBuilder
+import org.springframework.messaging.Message
+import org.springframework.kafka.support.KafkaHeaders
 
 @Service
 class PaymentService(
@@ -27,22 +30,22 @@ class PaymentService(
         repository.save(entity)
         //try{
             //sendToActivation(payment)
-            mandaPraFila()
+            mandaPraFila(payment)
         //}catch (e: Exception){
             println("mensagem não enviada para activations")
         //}
     }
 
-    fun mandaPraFila(){
-        val message: Message<String> = MessageBuilder
-                .withPayload("mensagem")
+    fun mandaPraFila(payload: Payment){
+        val message: Message<Payment> = MessageBuilder
+                .withPayload(payload)
                 .setHeader(KafkaHeaders.TOPIC, topic)
                 .setHeader("X-Custom-Header", "Custom header here")
                 .build()
         kafkaTemplate.send(message)
-        log.info("Message sent with success")
+        // log.info("Message sent with success")
         println("mandei pra fila")
-        throw RuntimeException("lascou!")
+        // throw RuntimeException("lascou!")
     }
 
     /*fun sendToActivation(payment: Payment) {

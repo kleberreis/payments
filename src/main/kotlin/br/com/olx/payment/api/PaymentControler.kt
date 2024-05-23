@@ -27,4 +27,4 @@ data class Payment(
     val price: BigDecimal,
     val status: String,
     val orderId: Long
-    )
+)
